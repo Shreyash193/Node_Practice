@@ -3,17 +3,16 @@ const express = require("express");
 const app=express();
 
 
-
-app.use("/test",(req,res)=>{
-    res.send("response from test route");
+app.get("/user",(req,res)=>{
+    res.send({firstName:"Shreyash",lastName:"Gore"});
 })
 
-app.use("/home",(req,res)=>{
-    res.send("response from home route");
+app.post("/user",(req,res)=>{
+    res.send("Data Saved Successfully");
 })
 
-app.use((req,res)=>{
-    res.send("Hello from Server");
+app.delete("/user",(req,res)=>{
+    res.send("Data Deleted Successfully");
 })
 
 app.listen(3000,()=>{
