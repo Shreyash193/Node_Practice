@@ -2,21 +2,21 @@ const express = require("express");
 
 const app=express();
 
+const {adminAuth ,userAuth}=require("./middlewares/auth");
 
-app.use("/user",
-    (req,res,next)=>{
-    console.log("1 route");
-    // res.send("Route Handler 1");
-    next();
-},  (req,res,next)=>{
-    console.log("2 route");
-    // res.send("Route Handler 2");
-    next();
-   },
-    (req,res,next)=>{
-    console.log("3 route");
-    // res.send("Route Handler 3");
-    next();
+app.use("/admin",adminAuth);
+app.use("/user",userAuth);
+
+app.get("/admin/getAllUsers",(req,res,next)=>{
+     res.send("all users data sent")
+});
+
+app.delete("/admin/deleteUser",(req,res)=>{
+    res.send("user data deleted")
+});
+
+app.get("/user",(req,res)=>{
+    res.send("user auth is called");
 });
    
   
