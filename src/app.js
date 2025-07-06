@@ -4,15 +4,12 @@ const {User}=require("./models/userSchema");
 
 const app=express();
 
+app.use(express.json());
 
+//add user api
 app.post("/signup",async (req,res)=>{
 
-    const user=new User({
-        firstName:"Samarth",
-        lastName:"Madale",
-        email:"samarth@gmial.com",
-        gender:"male"
-    });
+    const user=new User(req.body);
     
     try{
         await user.save();
@@ -20,12 +17,8 @@ app.post("/signup",async (req,res)=>{
     }
     catch(err){
         res.status(400).send("Error in saving user " + err.message );
-    }
-
-    
-
-
-})
+    };
+});
 
 connectDB().then(()=>{
     console.log("Database connection established..");
