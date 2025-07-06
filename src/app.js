@@ -1,26 +1,39 @@
 const express = require("express");
+const {connectDB}=require("./config/database");
+const {User}=require("./models/userSchema");
 
 const app=express();
 
-const {adminAuth ,userAuth}=require("./middlewares/auth");
 
-app.use("/admin",adminAuth);
-app.use("/user",userAuth);
+app.post("/signup",async (req,res)=>{
 
-app.get("/admin/getAllUsers",(req,res,next)=>{
-     res.send("all users data sent")
-});
+    const user=new User({
+        firstName:"Samarth",
+        lastName:"Madale",
+        email:"samarth@gmial.com",
+        gender:"male"
+    });
+    
+    try{
+        await user.save();
+        res.send("user saved successfull");
+    }
+    catch(err){
+        res.status(400).send("Error in saving user " + err.message );
+    }
 
-app.delete("/admin/deleteUser",(req,res)=>{
-    res.send("user data deleted")
-});
+    
 
-app.get("/user",(req,res)=>{
-    res.send("user auth is called");
-});
-   
-  
 
-app.listen(3000,()=>{
+})
+
+connectDB().then(()=>{
+    console.log("Database connection established..");
+    app.listen(3000,()=>{
     console.log("server is listening on port 3000..");
 })
+}).catch((err)=>{
+    console.error("Database cannot be connected");
+})
+
+
