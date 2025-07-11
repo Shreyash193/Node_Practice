@@ -60,16 +60,36 @@ app.delete("/deleteUser",async (req,res)=>{
 
 
 //update an user data
-app.patch("/updateUser",async(req,res)=>{
-    const userId=req.body.userId;
+app.patch("/updateUser/:userId",async(req,res)=>{
+    const userId=req.params?.userId;
     const data=req.body;
     try{
-        const user= await User.findByIdAndUpdate({_id:userId},data);
+
+        
+        const allowedUpdates=["userId","photoUrl","about","gender","skills","age"];
+        const isAllowedUpdates = Object.keys(data).every((keys)=>allowedUpdates.includes(keys));
+        if(!isAllowedUpdates){
+            throw new Error("UPDATE FAIL");
+        }
+
+        const user= await User.findByIdAndUpdate({_id:userId},data,{runValidators:true});
+        res.send("user updated successfully");
+    }
+    catch(err){
+        res.status(400).send("UPDATE FAIL" + err.message);
+
+    }
+})
+
+//update user with EmailId
+app.patch("/updateUserE",async (req,res)=>{
+    const userId=req.body.emailId;
+    try{
+        const user= await User.findOneAndUpdate({emailId:userId},{firstName:"sam"});
         res.send("user updated successfully");
     }
     catch(err){
         res.status(400).send("something went wrong");
-
     }
 })
 
