@@ -16,7 +16,8 @@ const userSchema=new mongoose.Schema({
     },
     emailId:{
         type:String,
-        required:true, 
+        required:true,
+        unique:true, 
         validate(value){
             if(!validator.isEmail(value)){
                 throw new Error("invalid emial address " + value);
@@ -57,6 +58,9 @@ const userSchema=new mongoose.Schema({
 },{
     timestamps:true,
 });
+
+
+userSchema.index({firstName:1,lastName:1});
 
 userSchema.methods.getJwt = async function (){
 
